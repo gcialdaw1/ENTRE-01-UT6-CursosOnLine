@@ -79,9 +79,18 @@ public class PlataformaCursos
      * Usar el conjunto de entradas y un iterador
      */
     public String toString() {
-
-        return "";
+        StringBuilder sb = new StringBuilder();
+        Set<Map.Entry<String, ArrayList<Curso>>> conjuntoEntradas = plataforma.entrySet();
+        Iterator<Map.Entry<String, ArrayList<Curso>>> it = conjuntoEntradas.iterator();
+        while(it.hasNext()){
+            Map.Entry<String, ArrayList<Curso>> entrada = it.next();
+            sb.append(entrada.getKey());
+            sb.append(" (").append(totalCursosEn(entrada.getKey())).append(")\n");
+            sb.append(entrada.getValue() + "\n");
+        }
+        return sb.toString();
     }
+
     /**
      * Mostrar la plataforma
      */
@@ -121,16 +130,29 @@ public class PlataformaCursos
      *  espacios antes y después de cada dato
      */
     private Curso obtenerCurso(String lineaCurso) {
+        String[] separados = lineaCurso.split(SEPARADOR);
 
-        return null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String fecha = separados[1].trim();
+        LocalDate tiempo = LocalDate.parse(fecha, formatter);
+
+        Nivel nivel = Nivel.valueOf(separados[2].trim().toUpperCase());
+
+        Curso curso = new Curso(separados[0], tiempo, nivel);
+        return curso;
     }
+
     /**
      * devuelve un nuevo conjunto con los nombres de todas las categorías  
      *  
      */
     public TreeSet<String> obtenerCategorias() {
-
-        return null;
+        TreeSet<String> conjunto = new TreeSet<>();
+        Set<String> conjuntoCategorias = plataforma.keySet();
+        for(String categorias:conjuntoCategorias){
+            conjunto.add(categorias);
+        }
+        return conjunto;
 
     }
 
@@ -142,19 +164,52 @@ public class PlataformaCursos
      *  
      */
 
-    public      borrarCursosDe(String categoria, Nivel nivel) {
-
-        return null;
+    public TreeSet<String> borrarCursosDe(String categoria, Nivel nivel) {
+        TreeSet<String> borrados = new TreeSet<>();
+        Set<Map.Entry<String, ArrayList<Curso>>> conjuntoEntradas = plataforma.entrySet();
+        Iterator <Map.Entry<String, ArrayList<Curso>>> it = conjuntoEntradas.iterator();
+        while(it.hasNext()){
+            Map.Entry <String , ArrayList<Curso>> entrada = it.next();
+            ArrayList<Curso> cursos = entrada.getValue();
+            int i = 0;
+            while(i < cursos.size()){
+                if(entrada.getKey().equals(categoria.toUpperCase())){
+                    if (cursos.get(i).getNivel().compareTo(nivel) >= 0 ){
+                        borrados.add(cursos.get(i).getNombre());
+                        cursos.remove(i);
+                        
+                    }
+                    else{
+                        i++;
+                    }
+                }
+                else {
+                    i++;
+                }
+            }
+        }
+        return borrados;
     }
+
     /**
      *   Devuelve el nombre del curso más antiguo en la
      *   plataforma (el primero publicado)
      */
 
     public String cursoMasAntiguo() {
-
-
-        return "";
+        String antiguo = "";
+        LocalDate fecha = LocalDate.MAX;
+        Set<String> conjuntoCategorias = plataforma.keySet();
+        for(String categorias :conjuntoCategorias){
+            ArrayList<Curso> cursos = plataforma.get(categorias);
+            for(Curso curso:cursos){
+                if(curso.getFecha().compareTo(fecha) < 0){
+                    fecha = curso.getFecha();
+                    antiguo = curso.getNombre();
+                }
+            }
+        }
+        return antiguo;
     }
 
     /**
