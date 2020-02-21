@@ -2,6 +2,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 /**
+ *  @author Garazi Cia
  *  Modela un curso ofrecido por la plataforma
  *  on line
  */
@@ -33,19 +34,20 @@ public class Curso
      * Si nombre = " sql essential training " devuelve "Sql Essential Training"
      */
     private String capitalizarNombre(String nombre) {
-        nombre.in
-        String nnombre = nombre.substring(1, nombre.length());
-        while(!nombre.startsWith(" ") && !nombre.endsWith(" ")) {
-            if(nombre.startsWith(" ")) {
-               
-            }
-        }
+        String nombreC = nombre.trim();
+        nombreC = nombreC.toLowerCase();
+        StringBuilder sb = new StringBuilder();
+        String[] separadas = nombreC.split(ESPACIO);
         
-        String primera = String.valueOf(nnombre.charAt(0));
-        primera = primera.toUpperCase();
-        nnombre = nnombre.replace(nnombre.charAt(0), primera.charAt(0));
-        return nnombre;
 
+        for(int i = 0; i < separadas.length;i++){
+            char letra = separadas[i].charAt(0);
+            String primera = Character.toString(letra).toUpperCase();
+            sb.append(primera).append(separadas[i].substring(1)).append(ESPACIO);
+
+        }
+
+        return sb.toString();
     }
 
     /**
@@ -78,7 +80,7 @@ public class Curso
      *  de la forma "día nombre-mes año"  Ej. "03 diciembre 2019" 
      */
     public String getFechaFormateada() {
-        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd MMM yyyy");
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd MMMM yyyy");
         String strFechaActual = fecha.format(formateador);
         return strFechaActual;
     }
