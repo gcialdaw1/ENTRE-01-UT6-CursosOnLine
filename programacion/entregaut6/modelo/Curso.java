@@ -1,3 +1,4 @@
+package programacion.entregaut6.modelo;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 

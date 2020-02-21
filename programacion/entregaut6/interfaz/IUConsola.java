@@ -1,3 +1,6 @@
+package programacion.entregaut6.interfaz;
+import programacion.entregaut6.modelo.PlataformaCursos;
+import programacion.entregaut6.modelo.Nivel;
 /**
  * Interfaz de texto
  *  
